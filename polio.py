@@ -140,6 +140,7 @@ if __name__ == "__main__":
     parser.add_argument("-c", "--compartments", default="compartments", help="Specify full path to compartments.exe")
 
     args = parser.parse_args()
+
     clr.AddReference(args.compartments)
 
     main()
