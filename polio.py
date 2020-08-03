@@ -7,11 +7,6 @@ import cmsmodel
 import json
 import sys
 
-from pathlib import Path
-SCRIPT_PATH = Path(__file__).parent
-COMPARTMENTS = (SCRIPT_PATH / "bin/compartments.exe").resolve()
-
-
 def main():
 
     description = construct_description()
@@ -139,10 +134,12 @@ def record_species(solver, species: dict):
 if __name__ == "__main__":
 
     parser = ArgumentParser()
-    parser.add_argument("-c", "--compartments", default=str(COMPARTMENTS), help="full path to compartments.exe")
+    # The default value here will work if the .NET assembly "compartments" is in the PYTHONPATH.
+    # If you are using the pycms docker container, this will be the case. Note that the default value
+    # doesn't have ".exe" at the end of it.
+    parser.add_argument("-c", "--compartments", default="compartments", help="Specify full path to compartments.exe")
 
     args = parser.parse_args()
-
     clr.AddReference(args.compartments)
 
     main()

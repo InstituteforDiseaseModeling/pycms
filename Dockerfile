@@ -28,3 +28,6 @@ RUN pip3 install numpy
 RUN pip3 install matplotlib
 RUN pip3 install scipy
 
+# This causes pythonnet to include /app in the list of folders
+# it looks in for assemblies.
+ENV PYTHONPATH=/app
