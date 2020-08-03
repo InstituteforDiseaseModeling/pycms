@@ -15,9 +15,6 @@ parser.add_argument("-c", "--compartments", default="compartments", help="Specif
 args = parser.parse_args()
 
 clr.AddReference(args.compartments)
-# Assumes that the .NET assembly "compartments" is in the PYTHONPATH.
-# If you are using the pycms docker container, this will be the case.
-clr.AddReference("compartments")
 from compartments.emodl import EmodlLoader
 from compartments import Configuration as cfg
 from compartments.emod.utils import SolverFactory as solvers
