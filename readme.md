@@ -1,23 +1,32 @@
 # CMS From Python Proof of Concept with [Python.NET](https://pythonnet.github.io/)
 
-## Quick Start
+## Quick Start with Docker
 
 ```bash
-# You should only have to do this once on your system. Use your user@idmod.org login.
+# Build the docker container image locally:
 #
-$ docker login idm-docker-staging.packages.idmod.org
+$ docker build --tag idmcms:1.0 .
+```
 
-$ docker pull idm-docker-staging.packages.idmod.org/pycms:9778b45_1597692284
+### Choose one of the following options for running compartmental models:
 
+1. Run the default command in the container (`python3 seir.py`)
+```bash
 # Run this from the directory where your python scripts live. The container will see them under '/host/'.
 #
-$ docker run --rm -it -v $(pwd):/host idm-docker-staging.packages.idmod.org/pycms:9778b45_1597692284 python3 /host/seir.py
+$ docker run --rm -it -v $(pwd):/host -w /host idmcms:1.0 
+```
 
-# Or, if you are in windows command prompt:
-c:\pycms> docker run --rm -it -v %cd%:/host idm-docker-staging.packages.idmod.org/pycms:9778b45_1597692284 python3 /host/seir.py
+2. Run the SEIR model with Python (replace `seir.py` with your own model when you are ready):
+```bash
+# Run this from the directory where your python scripts live. You can add your own model here instead of seir.py
+$ docker run -it -v $(pwd):/host -w /host idmcms:1.0 python3 seir.py
+```
 
-# The docker tag above includes a specific revision after the ":". IDM Artifactory is not yet set up for ":latest", see this ticket: https://helpdesk.idmod.org/browse/REQUEST-12766
-# After we fix that ticket, you'll usually just use ":latest".
+3. Run the model of your choice, written in EMODL, directly in CMS with the Mono .Net runtime (this verifies that the container is correctly set up to run .Net code with the Mono runtime; replace `seir.emodl` and `config.json` with your own model and configuration when you are ready):
+```bash
+# Run this from the directory where your model and config files live. You can add your own model here instead of seir.emodl
+$ docker run -it -v $(pwd):/host -w /host idmcms:1.0 mono bin/compartments.exe --model seir.emodl --config config.json
 ```
 
 ## Documentation
