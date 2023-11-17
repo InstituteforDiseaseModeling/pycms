@@ -1,19 +1,25 @@
-FROM idm-docker-staging.packages.idmod.org/ubuntu-mono-pythonnet:a49e9b7_1597089628
+# use 8.8, older, more mature?
+FROM rockylinux:9.2
 
-RUN apt-get update -y
-# preempt tzdata install in the next line
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
-RUN apt-get install -y libtiff5-dev libjpeg8-dev libopenjp2-7-dev zlib1g-dev \
-    libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python3-tk \
-    libharfbuzz-dev libfribidi-dev libxcb1-dev
+LABEL version="1.0.0"
+LABEL description="Rocky Linux based container for running IDM's compartmental modeling software (CMS)"
 
-# These are here to support user scripts.
-RUN pip3 install numpy matplotlib scipy
+RUN yum update -y
 
-# This causes pythonnet to include /app in the list of folders
-# it looks in for assemblies.
+RUN update-crypto-policies --set DEFAULT:SHA1
+RUN rpmkeys --import "http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF"
+RUN curl https://download.mono-project.com/repo/centos8-stable.repo | tee /etc/yum.repos.d/mono-centos8-stable.repo
+RUN dnf install -y mono-complete
+
+# python.net
+RUN yum install -y clang python3-pip
+RUN python3 -m pip install pythonnet==3.0.3 numpy==1.26.2 matplotlib==3.8.1 pandas==2.1.3
+
+# This causes pythonnet to include /app in the list of folders it looks in for assemblies.
 ENV PYTHONPATH=/app
 
 COPY bin /app
 COPY seir.py /app
 COPY cmsmodel.py /app
+
+CMD python3 /host/seir.py --png
