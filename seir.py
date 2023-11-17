@@ -22,6 +22,7 @@ from compartments.emod.utils import SolverFactory as solvers
 
 import cmsmodel
 
+import pandas as pd
 
 def main():
 
@@ -40,14 +41,20 @@ def main():
     solver = solvers.CreateSolver(config["solver"], model_info, 1, 180.0, 180)
     solver.Solve()
     data = solver.GetTrajectoryData()
+    df = pd.DataFrame(columns=list(map(str, solver.GetTrajectoryLabels())))
     for index, label in enumerate(solver.GetTrajectoryLabels()):
+        print(f"index={index}, label={label}")
         plt.plot([float(value) for value in data[index]], label=str(label))
+        df[str(label)] = [float(value) for value in data[index]]
     plt.legend()
     if not args.png:
         plt.show()
     else:
         print("Saving plot to 'trajectory.png'")
         plt.savefig("trajectory.png")
+
+    print(df.head())
+    df.to_csv("trajectories.net.csv")
 
     return
 
