@@ -5,7 +5,7 @@
 ```bash
 # Build the docker container image locally:
 #
-$ docker build --tag idmcms:1.0 .
+docker build --tag idmcms:1.0 .
 ```
 
 ### Choose one of the following options for running compartmental models:
@@ -14,19 +14,19 @@ $ docker build --tag idmcms:1.0 .
 ```bash
 # Run this from the directory where your python scripts live. The container will see them under '/host/'.
 #
-$ docker run --rm -it -v $(pwd):/host -w /host idmcms:1.0 
+docker run --rm -it -v $(pwd):/host -w /host idmcms:1.0 
 ```
 
 2. Run the SEIR model with Python (replace `seir.py` with your own model when you are ready):
 ```bash
 # Run this from the directory where your python scripts live. You can add your own model here instead of seir.py
-$ docker run -it -v $(pwd):/host -w /host idmcms:1.0 python3 seir.py
+docker run -it -v $(pwd):/host -w /host idmcms:1.0 python3 seir.py
 ```
 
 3. Run the model of your choice, written in EMODL, directly in CMS with the Mono .Net runtime (this verifies that the container is correctly set up to run .Net code with the Mono runtime; replace `seir.emodl` and `config.json` with your own model and configuration when you are ready):
 ```bash
 # Run this from the directory where your model and config files live. You can add your own model here instead of seir.emodl
-$ docker run -it -v $(pwd):/host -w /host idmcms:1.0 mono bin/compartments.exe --model seir.emodl --config config.json
+docker run -it -v $(pwd):/host -w /host idmcms:1.0 mono bin/compartments.exe --model seir.emodl --config config.json
 ```
 
 ## Documentation
