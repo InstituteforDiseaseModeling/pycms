@@ -2,29 +2,37 @@
 
 ## Quick Start with Docker
 
-### Build the docker container image locally
+### Get a local copy of the docker container image
+
+**Option 1- pull the image from Docker Hub:**
 
 ```bash
-docker build --tag idmcms:1.0 .
+docker pull clorton/idmcms:1.0
+```
+
+**Option 2- build the image locally:**
+
+```bash
+docker build --tag clorton/idmcms:1.0 .
 ```
 
 ### Choose one of the following options for running compartmental models:
 
 1. _Run the default command in the container (`python3 seir.py`)._<br>This will write trajectory data to `trajectories.net.csv` and a plot to `trajectory.png`.
 ```bash
-docker run --rm -it -v $(pwd):/host -w /host idmcms:1.0 
+docker run --rm -it -v $(pwd):/host -w /host clorton/idmcms:1.0 
 ```
 Run this from the directory where your python scripts live. The container will see them under `/host/`. You can modify `seir.py` in place if you want to try other epidemiological parameters.
 
 2. _Run the SEIR model with Python._<br>This will write trajectory data to `trajectories.net.csv` and a plot to `trajectory.png`.
 ```bash
-docker run -it -v $(pwd):/host -w /host idmcms:1.0 python3 seir.py
+docker run --rm -it -v $(pwd):/host -w /host clorton/idmcms:1.0 python3 seir.py --png
 ```
 Run this from the directory where your python scripts live. You can add your own model here instead of `seir.py`.
 
-3. _Run the model of your choice, written in EMODL, directly in CMS with the Mono .Net runtime (this verifies that the container is correctly set up to run .Net code with the Mono runtime._<br>This will write trajectory data to `trajectories.cms.csv`.
+3. _Run the model of your choice, written in EMODL, directly in CMS with the Mono .Net runtime (this verifies that the container is correctly set up to run .Net code with the Mono runtime)._<br>This will write trajectory data to `trajectories.cms.csv`.
 ```bash
-docker run -it -v $(pwd):/host -w /host idmcms:1.0 mono bin/compartments.exe --model seir.emodl --config config.json
+docker run --rm -it -v $(pwd):/host -w /host clorton/idmcms:1.0 mono bin/compartments.exe --model seir.emodl --config config.json
 ```
 Run this from the directory where your model and config files live. You can add your own model and config here instead of `seir.emodl` and `config.json`.
 
@@ -33,7 +41,7 @@ Run this from the directory where your model and config files live. You can add 
 * [1-pager overview](https://github.com/InstituteforDiseaseModeling/pycms/blob/master/specs/one-pager.md)
 * [Specification](https://github.com/InstituteforDiseaseModeling/pycms/blob/master/specs/specification.md)
 
-## Setup
+## Local Setup
 
 - consider creating a virtual environment with `python -m virtualenv venv`
 - activate your virtual environment with `venv\scripts\activate.bat`
